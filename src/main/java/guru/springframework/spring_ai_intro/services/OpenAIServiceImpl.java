@@ -4,10 +4,7 @@ package guru.springframework.spring_ai_intro.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.spring_ai_intro.model.Answer;
-import guru.springframework.spring_ai_intro.model.GetCapitalRequest;
-import guru.springframework.spring_ai_intro.model.GetCapitalResponse;
-import guru.springframework.spring_ai_intro.model.Question;
+import guru.springframework.spring_ai_intro.model.*;
 import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -38,12 +35,16 @@ public class OpenAIServiceImpl implements OpenAIService {
     ObjectMapper objectMapper;
 
     @Override
-    public Answer getCapitalWithInfo(GetCapitalRequest getCapitalRequest) {
-        PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptWithInfo);
-        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
+    public GetCapitalWithInfoResponse getCapitalWithInfo(GetCapitalRequest getCapitalRequest) {
+        BeanOutputParser<GetCapitalWithInfoResponse> parser = new BeanOutputParser<>(GetCapitalWithInfoResponse.class);
+        String format = parser.getFormat();
+
+        PromptTemplate promptTemplate = new PromptTemplate(getCapitalPrompt);
+        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry(),
+                "format", format));
         ChatResponse response = chatClient.call(prompt);
 
-        return new Answer(response.getResult().getOutput().getContent());
+        return parser.parse(response.getResult().getOutput().getContent());
     }
 
     @Override
