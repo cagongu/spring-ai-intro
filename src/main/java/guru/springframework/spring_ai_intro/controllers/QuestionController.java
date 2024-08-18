@@ -2,6 +2,7 @@ package guru.springframework.spring_ai_intro.controllers;
 
 import guru.springframework.spring_ai_intro.model.Answer;
 import guru.springframework.spring_ai_intro.model.GetCapitalRequest;
+import guru.springframework.spring_ai_intro.model.GetCapitalResponse;
 import guru.springframework.spring_ai_intro.model.Question;
 import guru.springframework.spring_ai_intro.services.OpenAIService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +23,8 @@ public class QuestionController {
         return this.openAIService.getCapitalWithInfo(getCapitalRequest);
     }
 
-
     @PostMapping("/capital")
-    public Answer getCapital(@RequestBody GetCapitalRequest getCapitalRequest) {
+    public GetCapitalResponse getCapital(@RequestBody GetCapitalRequest getCapitalRequest) {
         return this.openAIService.getCapital(getCapitalRequest);
     }
 
