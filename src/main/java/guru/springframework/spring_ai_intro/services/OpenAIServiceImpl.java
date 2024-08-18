@@ -1,6 +1,8 @@
 package guru.springframework.spring_ai_intro.services;
 
 
+import guru.springframework.spring_ai_intro.model.Answer;
+import guru.springframework.spring_ai_intro.model.Question;
 import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -16,6 +18,8 @@ public class OpenAIServiceImpl implements OpenAIService {
         this.chatClient = chatClient;
     }
 
+
+
     @Override
     public String getAnswer(String question) {
         PromptTemplate promptTemplate = new PromptTemplate(question);
@@ -24,4 +28,14 @@ public class OpenAIServiceImpl implements OpenAIService {
 
         return response.getResult().getOutput().getContent();
     }
+
+    @Override
+    public Answer getAnswer(Question question) {
+        PromptTemplate promptTemplate = new PromptTemplate(question.question());
+        Prompt prompt = promptTemplate.create();
+        ChatResponse response = chatClient.call(prompt);
+
+        return new Answer(response.getResult().getOutput().getContent());
+    }
+
 }
