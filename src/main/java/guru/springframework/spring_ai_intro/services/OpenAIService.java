@@ -5,6 +5,8 @@ import guru.springframework.spring_ai_intro.model.GetCapitalRequest;
 import guru.springframework.spring_ai_intro.model.Question;
 
 public interface OpenAIService {
+    Answer getCapitalWithInfo(GetCapitalRequest getCapitalRequest);
+
     Answer getCapital(GetCapitalRequest getCapitalRequest);
 
     String getAnswer(String question);
